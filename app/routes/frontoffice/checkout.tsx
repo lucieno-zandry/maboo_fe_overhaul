@@ -229,7 +229,7 @@ export default function () {
                         }
 
                         setCartItems([]);
-                        navigate(`/${lang}/order/${response.data.order.uuid}`);
+                        navigate(`/${lang}/orders/${response.data.order.uuid}`);
                     }
                 }
             })

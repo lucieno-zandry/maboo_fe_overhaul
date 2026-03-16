@@ -11,7 +11,7 @@ export function ProductListItem({ product }: { product: Product }) {
     const { lang } = useRouterStore();
 
     // Check if the user has permission to see special prices (still used for badge logic)
-    const canSeeSpecial = user?.permissions?.can_use_special_prices ?? false;
+    const canSeeSpecial = user?.permissions?.can_use_effective_prices ?? false;
 
     // Calculate the lowest price based on effective_price (if available)
     const lowestPrice = product.variants?.reduce((min, variant) => {

@@ -1,3 +1,7 @@
+// ============================================================================
+// Core Models
+// ============================================================================
+
 type User = {
   id: number;
   name: string;
@@ -13,7 +17,7 @@ type User = {
   client_code?: ClientCode;
 
   permissions?: {
-    can_use_special_prices: boolean;
+    can_use_effective_prices: boolean;
   };
 
   avatar_image?: AppImage;
@@ -47,17 +51,16 @@ type Variant = {
   updated_at: string;
   product_id: number;
   sku: string;
-  price: number;                     // base price (before any discounts)
+  price: number;
   stock: number;
   image_id: string | null;
 
-  // Computed fields (added via accessors)
-  effective_price?: number;           // final price after promotions (if user eligible)
-  applied_promotions?: AppliedPromotion[]; // list of promotions that contributed to the discount
+  effective_price?: number;
+  applied_promotions?: AppliedPromotion[];
 
   product?: Product;
   variant_options?: VariantOption[];
-  promotions?: Promotion[];          // all active promotions linked to this variant
+  promotions?: Promotion[];
   image?: AppImage;
 };
 
@@ -91,28 +94,26 @@ type Promotion = {
   id: number;
   created_at: string;
   updated_at: string;
-  discount: number;                  // amount (percentage or fixed)
+  discount: number;
   type: "PERCENTAGE" | "FIXED_AMOUNT";
   start_date: string;
   end_date: string;
   is_active: boolean;
-  name: string;                      // e.g. "Partner Discount"
+  name: string;
   badge?: string;
 
-  // New fields for eligibility and stacking
   applies_to: "all" | "client_code_only" | "regular_only";
   stackable: boolean;
-  priority: number;                  // lower = higher priority (used when stackable = false)
-  apply_order?: "percentage_first" | "fixed_first"; // order when stacking
-  max_discount?: number;              // optional absolute cap
+  priority: number;
+  apply_order?: "percentage_first" | "fixed_first";
+  max_discount?: number;
 };
 
-// Simplified version of a promotion for display in badges
 type AppliedPromotion = {
   id: number;
-  name: string;                      // e.g. "Partner Discount"
-  badge?: string;                     // e.g. "PARTNER", "SALE" – used to style the badge
-  discount: number;                   // amount applied (for tooltips etc.)
+  name: string;
+  badge?: string;
+  discount: number;
   type: "PERCENTAGE" | "FIXED_AMOUNT";
 };
 
@@ -126,15 +127,14 @@ type CartItem = {
 
   count: number;
 
-  unit_price: number;                  // price per item at time of addition (after promotions)
-  promotion_discount_applied: number;   // total discount applied
-  total: number;                        // final total (count * unit_price - discounts)
+  unit_price: number;
+  promotion_discount_applied: number;
+  total: number;
 
-  // Snapshots
   product_snapshot: ProductSnapshot;
   variant_snapshot: VariantSnapshot;
   variant_options_snapshot: VariantOptionsSnapshot;
-  applied_promotions_snapshot?: AppliedPromotion[]; // promotions that contributed to the final price
+  applied_promotions_snapshot?: AppliedPromotion[];
 
   created_at: string;
   updated_at: string;
@@ -156,7 +156,7 @@ type ProductSnapshot = {
 type VariantSnapshot = {
   id: number;
   sku: string;
-  price: number;                      // base price at time of addition (before promotions)
+  price: number;
   image: string | null;
 };
 
@@ -193,6 +193,7 @@ type Order = {
   cart_items?: CartItem[];
   shipments?: Shipment[];
   transactions?: Transaction[];
+  user?: User;
 };
 
 type Coupon = {
@@ -228,8 +229,14 @@ type ShipmentData = {
   shipped_date?: string;
 };
 
+// ----------------------------------------------------------------------------
+// Transaction & related types (updated)
+// ----------------------------------------------------------------------------
+type TransactionType = "PAYMENT" | "REFUND" | "MANUAL";
+type DisputeStatus = "OPEN" | "RESOLVED" | "LOST";
+
 type Transaction = {
-  id: number;
+  uuid: string;                       // primary key (UUID)
   created_at: string;
   updated_at: string;
   status: "FAILED" | "PENDING" | "SUCCESS";
@@ -239,15 +246,88 @@ type Transaction = {
   deleted_at: string | null;
   method: "VISA" | "MASTERCARD" | "ORANGEMONEY" | "AIRTELMONEY" | "MVOLA" | "PAYPAL";
   payment_url: string | null;
+  amount: number;
+
+  type: TransactionType;
+  parent_transaction_uuid?: string | null;
+  payment_reference?: string | null;
+  reviewed_at?: string | null;
+  reviewed_by?: number | null;
+  notes?: string | null;
+  dispute_status?: DisputeStatus | null;
+  dispute_opened_at?: string | null;
+  dispute_resolved_at?: string | null;
+  dispute_reason?: string | null;      // 👈 new field
+
+  // Relations
   user?: User;
   order?: Order;
-  amount: number;
+  parent_transaction?: Transaction | null;
+  child_transactions?: Transaction[];
+  audit_logs?: TransactionAuditLog[];
+  webhook_logs?: PaymentWebhookLog[];
+  refund_requests?: RefundRequest[];   // 👈 new relation
 };
 
+type TransactionAuditLog = {
+  id: number;
+  transaction_uuid: string;
+  performed_by?: number | null;
+  action: string;
+  old_value?: string | null;
+  new_value?: string | null;
+  reason?: string | null;
+  metadata?: Record<string, any> | null;
+  created_at: string;
+  performed_by_user?: User | null;
+};
+
+type WebhookLogStatus = "RECEIVED" | "PROCESSED" | "FAILED" | "IGNORED";
+
+type PaymentWebhookLog = {
+  id: number;
+  transaction_uuid?: string | null;
+  order_uuid?: string | null;
+  gateway: string;
+  event_type?: string | null;
+  payload: Record<string, any>;
+  response?: Record<string, any> | null;
+  status: WebhookLogStatus;
+  error_message?: string | null;
+  source_ip?: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+// ----------------------------------------------------------------------------
+// New RefundRequest model
+// ----------------------------------------------------------------------------
+type RefundRequest = {
+  uuid: string;                         // primary key (UUID)
+  user_id: number;
+  transaction_uuid: string;
+  amount: number;
+  reason: string;
+  status: "pending" | "approved" | "rejected";
+  admin_notes?: string | null;
+  reviewed_by?: number | null;
+  reviewed_at?: string | null;
+  created_at: string;
+  updated_at: string;
+
+  // Relations
+  user?: User;
+  transaction?: Transaction;
+  reviewer?: User;
+};
+
+// ----------------------------------------------------------------------------
+// Notification types (updated)
+// ----------------------------------------------------------------------------
 type TransactionNotificationData = {
   notification_type: "transaction";
   type: "payment_success" | "payment_failed";
-  transaction_id: number;
+  transaction_uuid?: string;            // note: originally transaction_id, but updated to match new UUID
   order_uuid: string;
   amount: number;
   payment_method: string;
@@ -268,13 +348,44 @@ type ShipmentNotificationData = {
   };
 };
 
+type RefundNotificationData = {
+  notification_type: "refund";
+  type: "refund_requested" | "refund_approved" | "refund_rejected";
+  refund_request_uuid?: string;
+  transaction_uuid?: string;
+  refund_transaction_uuid?: string;     // for approved
+  order_uuid?: string;
+  amount?: number;
+  customer_name?: string;
+  reason?: string;
+  admin_notes?: string;
+  message: string;
+};
+
+type DisputeNotificationData = {
+  notification_type: "dispute";
+  type: "dispute_opened" | "dispute_resolved" | "dispute_cancelled";
+  transaction_uuid: string;
+  order_uuid?: string;
+  customer_name?: string;
+  reason?: string;
+  outcome?: string;                     // for resolved
+  amount?: number;
+  message: string;
+};
+
 type OtherNotificationData = {
   notification_type: "system";
   title: string;
   message: string;
 };
 
-type NotificationData = TransactionNotificationData | ShipmentNotificationData | OtherNotificationData;
+type NotificationData =
+  | TransactionNotificationData
+  | ShipmentNotificationData
+  | RefundNotificationData
+  | DisputeNotificationData
+  | OtherNotificationData;
 
 type AppNotification = {
   id: string;
@@ -285,6 +396,9 @@ type AppNotification = {
   updated_at: string;
 };
 
+// ----------------------------------------------------------------------------
+// ClientCode (unchanged)
+// ----------------------------------------------------------------------------
 type ClientCode = {
   id: number;
   code: string;

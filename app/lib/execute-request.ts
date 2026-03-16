@@ -1,5 +1,6 @@
 import { HttpException, ValidationException, type FormatedResponse } from "~/api/app-fetch";
 import handleActionRedirection from "./handle-action-redirection";
+import handleNotFound from "./handleNotFound";
 
 async function executeRequest<T>(request: () => Promise<Response>) {
     const formatedResponse: FormatedResponse<T> = {
@@ -17,6 +18,8 @@ async function executeRequest<T>(request: () => Promise<Response>) {
             // if backend wants to redirect the user
             if (response.status === 403 && json.action) {
                 handleActionRedirection(json);
+            } else if (response.status === 404) {
+                handleNotFound();
             }
             formatedResponse.error = json;
         } else {

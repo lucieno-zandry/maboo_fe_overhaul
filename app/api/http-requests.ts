@@ -132,11 +132,13 @@ export function getOrders() {
 }
 
 export function getOrder(uuid: string) {
-    return appFetch.get<{ order: Order }>(`/order/get/${uuid}?with=cart_items,transactions,shipments`);
+    return appFetch.get<{ order: Order }>(
+        `/order/get/${uuid}?with=cart_items,shipments,transactions.refund_requests,transactions.child_transactions`
+    );
 }
 
 export function createTransaction(data: Pick<Transaction, 'method' | 'order_uuid' | 'amount'>) {
-    return appFetch.post<{ transaction: Transaction }>('/transaction/create', data)
+    return appFetch.post<{ transaction: Transaction }>('/transactions', data)
 }
 
 export function getNotifications() {
@@ -189,4 +191,24 @@ export function getCategories() {
 
 export function getClientCode(code: string) {
     return appFetch.get<{ client_code: ClientCode | null }>(`/client-code/get/${code}`);
+}
+
+export function requestRefund(transactionUuid: string, data: { amount?: number; reason: string }) {
+    return appFetch.post<{ refund_request: RefundRequest }>(
+        `/transactions/${transactionUuid}/refund-request`,
+        data
+    );
+}
+
+export function openDispute(transactionUuid: string, data: { reason: string }) {
+    return appFetch.post<{ transaction: Transaction }>(
+        `/transactions/${transactionUuid}/dispute`,
+        data
+    );
+}
+
+export function cancelDispute(transactionUuid: string) {
+    return appFetch.delete<{ transaction: Transaction }>(
+        `/transactions/${transactionUuid}/dispute`
+    );
 }

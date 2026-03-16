@@ -127,7 +127,7 @@ export default function ({ onMarkAsRead, ...props }: Omit<NotificationsPopoverPr
 
         // 2. Handle Navigation based on type
         if (n.data.notification_type === "transaction" || n.data.notification_type === "shipment") {
-            navigate(`/${lang}/order/${n.data.order_uuid}`);
+            navigate(`/${lang}/orders/${n.data.order_uuid}`);
         }
     };
 

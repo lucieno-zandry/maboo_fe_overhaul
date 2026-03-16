@@ -110,7 +110,7 @@ export default function ({ product }: { product: Product }) {
     const { lang } = useRouterStore();
     const { t } = useTranslation("products");
 
-    const canSeeSpecial = user?.permissions?.can_use_special_prices ?? false;
+    const canSeeSpecial = user?.permissions?.can_use_effective_prices ?? false;
 
     // Calculate lowest price using effective_price if available
     const lowestPrice = product.variants?.reduce((min, variant) => {

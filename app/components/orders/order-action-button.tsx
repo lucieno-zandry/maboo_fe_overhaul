@@ -13,7 +13,7 @@ export function OrderActionButton({ orderUuid, requiresReview, lang }: OrderActi
     if (requiresReview) {
         return (
             <Button size="sm" className="w-full text-xs gap-2 group" asChild>
-                <Link to={`/${lang}/order/${orderUuid}`}>
+                <Link to={`/${lang}/orders/${orderUuid}`}>
                     Review & Pay
                     <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                 </Link>
@@ -23,7 +23,7 @@ export function OrderActionButton({ orderUuid, requiresReview, lang }: OrderActi
 
     return (
         <Button variant="outline" size="sm" className="w-full text-xs text-muted-foreground" asChild>
-            <Link to={`/${lang}/order/${orderUuid}`}>View Order</Link>
+            <Link to={`/${lang}/orders/${orderUuid}`}>View Order</Link>
         </Button>
     );
 }
