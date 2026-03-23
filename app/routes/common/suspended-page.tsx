@@ -1,14 +1,41 @@
-import { useNavigate } from "react-router";
+import { redirect, useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
 import { Clock, LogOut, ShieldAlert, Calendar } from "lucide-react";
-import useRouterStore from "~/hooks/use-router-store";
-import { useUserStore } from "~/hooks/use-user";
-import { getCurrentUserStatus } from "~/lib/user-status";
 import { Button } from "~/components/ui/button";
+import useRouterStore from "~/hooks/use-router-store";
+import { getCurrentUserStatus, isUserSuspended } from "~/lib/user-status";
+import { useSuccessRedirect } from "~/hooks/use-redirect-action";
+import { getAuthUser } from "~/api/http-requests";
+import { HttpException } from "~/api/app-fetch";
+
+const successRedirect = useSuccessRedirect();
+
+export async function clientLoader({ params }: LoaderFunctionArgs) {
+    const { lang } = params;
+
+    try {
+        const authResponse = await getAuthUser();
+        const user = authResponse.data?.user;
+
+        if (user && !isUserSuspended(user))
+            return successRedirect();
+
+        return user;
+
+    } catch (error) {
+        if (error instanceof HttpException) {
+            return redirect(`/${lang}/auth`);
+        }
+    }
+
+    return null;
+}
+
 
 export default function SuspendedPage() {
     const navigate = useNavigate();
     const { lang } = useRouterStore();
-    const { user } = useUserStore();
+
+    const user = useLoaderData<typeof clientLoader>();
     const status = user ? getCurrentUserStatus(user) : null;
     const expiresAt = status?.expires_at ? new Date(status.expires_at) : null;
 

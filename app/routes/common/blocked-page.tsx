@@ -1,14 +1,39 @@
-import { useNavigate } from "react-router";
+import { redirect, useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
 import { Ban, LogOut, ShieldAlert } from "lucide-react";
-import Button from "~/components/custom-ui/button";
+import { Button } from "~/components/ui/button";
 import useRouterStore from "~/hooks/use-router-store";
-import { useAuthStore } from "~/hooks/use-auth-store";
-import { getCurrentUserStatus } from "~/lib/user-status";
+import { getCurrentUserStatus, isUserBlocked } from "~/lib/user-status";
+import { useSuccessRedirect } from "~/hooks/use-redirect-action";
+import { getAuthUser } from "~/api/http-requests";
+import { HttpException } from "~/api/app-fetch";
+
+const successRedirect = useSuccessRedirect();
+
+export async function clientLoader({ params }: LoaderFunctionArgs) {
+    const { lang } = params;
+
+    try {
+        const authResponse = await getAuthUser();
+        const user = authResponse.data?.user;
+
+        if (user && !isUserBlocked(user))
+            return successRedirect();
+
+        return user;
+
+    } catch (error) {
+        if (error instanceof HttpException) {
+            return redirect(`/${lang}/auth`);
+        }
+    }
+
+    return null;
+}
 
 export default function BlockedPage() {
     const navigate = useNavigate();
     const { lang } = useRouterStore();
-    const { user } = useAuthStore();
+    const user = useLoaderData<typeof clientLoader>();
 
     const status = user ? getCurrentUserStatus(user) : null;
 
