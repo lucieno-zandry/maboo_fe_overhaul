@@ -14,6 +14,7 @@ import {
 import { Form, useNavigation } from "react-router";
 import { Mail } from "lucide-react";
 import Button from "./custom-components/button";
+import { useTranslation } from "react-i18next";
 
 export type EmailVerificationOtpProps = {
     onSendEmailVerificationCode: () => void,
@@ -26,6 +27,7 @@ export function EmailVerificationOtp({
     onSendEmailVerificationCode,
     errorMessages
 }: EmailVerificationOtpProps) {
+    const { t } = useTranslation("auth");
     const [otp, setOtp] = React.useState("");
     const codeLength = 6;
 
@@ -59,11 +61,10 @@ export function EmailVerificationOtp({
         <Card>
             <CardHeader className="space-y-1 text-center">
                 <CardTitle className="text-2xl font-bold flex justify-center items-center gap-2">
-                    <Mail /> Verify Your Email
+                    <Mail /> {t("email_verification.title")}
                 </CardTitle>
                 <CardDescription>
-                    We've sent a {codeLength}-digit verification code to your email address.
-                    Please enter it below to confirm your account.
+                    {t("email_verification.description", { codeLength })}
                 </CardDescription>
             </CardHeader>
 
@@ -92,23 +93,23 @@ export function EmailVerificationOtp({
                         className="w-full"
                         disabled={otp.length !== codeLength}
                         isLoading={isLoading}>
-                        Verify Account
+                        {t("email_verification.verify_button")}
                     </Button>
                 </Form>
 
                 <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                    Didn't receive the code?
+                    {t("email_verification.didnt_receive")}
                     {canResend ? (
                         <Button
                             variant="link"
                             onClick={handleResend}
                             className="p-1 h-auto"
                         >
-                            Resend Code
+                            {t("email_verification.resend_code")}
                         </Button>
                     ) : (
                         <span className="ml-1">
-                            Resend available in {secondsLeft}s
+                            {t("email_verification.resend_available_in", { secondsLeft })}
                         </span>
                     )}
                 </div>

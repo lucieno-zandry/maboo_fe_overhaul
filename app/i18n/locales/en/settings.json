@@ -40,6 +40,9 @@
     "newPassword": "New Password",
     "confirmNewPassword": "Confirm new password",
     "updatePassword": "Update Password",
+    "passwordMismatch": "The password confirmation does not match!",
+    "passwordUpdatedSuccess": "Password updated successfully!",
+    "passwordUpdateError": "Failed to update password with status: ",
     "profileUpdatedSuccess": "Profile updated successfully!",
     "checkFieldErrors": "Check the field errors and try again.",
     "partnerAccessActive": "Partner Access Active",
@@ -47,5 +50,18 @@
     "exclusivePricingApplied": "Exclusive member pricing is currently applied to all eligible products.",
     "partnerProgram": "Partner Program",
     "unlockWholesalePricing": "Unlock wholesale and partner-exclusive pricing.",
-    "enterPartnerCode": "Enter Partner Code"
+    "enterPartnerCode": "Enter Partner Code",
+    "clientCode": {
+        "title": "Client Partner Access",
+        "description": "If you have a client code, enter it below to unlock exclusive pricing on our products.",
+        "placeholder": "Enter your code (e.g. PARTNER20)",
+        "applyCode": "Apply Code",
+        "noCode": "I don't have a code",
+        "successNowSpecial": "You are now a special customer!",
+        "errorApply": "Failed to apply client code. Please try again.",
+        "successSaved": "Client code saved! It will be applied when you log in.",
+        "invalidCode": "Invalid client code",
+        "errorApplyStatus": "Failed to apply client code: ",
+        "checkCodeTryAgain": "Please check your code and try again."
+    }
 }

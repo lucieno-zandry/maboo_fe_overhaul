@@ -9,6 +9,8 @@ import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { toast } from "sonner";
 import BackButton from "~/components/back-button";
+import { useTranslation } from "react-i18next";
+import i18n from "~/i18n/i18n";
 
 const emailFormat = z.email();
 
@@ -29,7 +31,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
         const response = await sendPasswordResetLink(email);
 
         if (response.data?.link_sent) {
-            toast.success("Password reset link sent");
+            toast.success(i18n.t("auth:forgot_password.success_toast"));
         }
     } catch (e) {
         return e;
@@ -37,6 +39,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 }
 
 export default function () {
+    const { t } = useTranslation("auth");
     const actionData = useActionData<any>();
     const navigation = useNavigation();
     const isLoading = React.useMemo(() => navigation.state === "submitting", [navigation.state]);
@@ -70,19 +73,19 @@ export default function () {
 
         <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Reset your password</h1>
+                <h1 className="text-2xl font-bold">{t("forgot_password.reset_password")}</h1>
                 <p className="text-muted-foreground text-balance">
-                    Type your email address
+                    {t("forgot_password.type_email")}
                 </p>
             </div>
 
             <CustomField
                 validationErrors={actionData?.errors?.email}
-                label="Email"
+                label={t("forgot_password.email")}
                 id="email"
                 type="email"
                 name="email"
-                placeholder="username@example.com"
+                placeholder={t("forgot_password.email_placeholder")}
                 dataFormat={emailFormat}
                 onValidationErrorsChange={handleValidationErrorsChange}
                 defaultValue={email}
@@ -90,7 +93,7 @@ export default function () {
 
             <Field>
                 <Button type="submit" isLoading={isLoading} disabled={!userCanSubmit}>
-                    Continue
+                    {t("forgot_password.continue")}
                 </Button>
             </Field>
         </FieldGroup>

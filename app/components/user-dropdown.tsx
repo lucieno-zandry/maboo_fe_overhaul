@@ -20,10 +20,12 @@ import React from "react";
 import { Link } from "react-router";
 import useClientCodeDialogStore from "~/hooks/use-client-code-dialog-store";
 import { MapPin, Package, Settings, TicketPercent } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function () {
     const { user } = useUserStore();
     const { setIsOpen } = useClientCodeDialogStore();
+    const { t } = useTranslation("common");
 
     const [logoutOpen, setLogoutOpen] = React.useState(false);
 
@@ -40,24 +42,24 @@ export default function () {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="start">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t("user_menu.my_account")}</DropdownMenuLabel>
                     <DropdownMenuGroup>
                         <DropdownMenuItem asChild>
                             <Link to={'addresses'} className="flex items-center">
                                 <MapPin className="mr-2 h-4 w-4" />
-                                <span>Addresses</span>
+                                <span>{t("user_menu.addresses")}</span>
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                             <Link to={'settings'} className="flex items-center">
                                 <Settings className="mr-2 h-4 w-4" />
-                                <span>Settings</span>
+                                <span>{t("user_menu.settings")}</span>
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
                             <Link to={'orders'} className="flex items-center">
                                 <Package className="mr-2 h-4 w-4" />
-                                <span>Orders</span>
+                                <span>{t("user_menu.orders")}</span>
                             </Link>
                         </DropdownMenuItem>
 
@@ -70,16 +72,16 @@ export default function () {
                                     className="text-primary focus:text-primary focus:bg-primary/5 cursor-pointer font-medium"
                                 >
                                     <TicketPercent className="mr-2 h-4 w-4" />
-                                    <span>Unlock Partner Prices</span>
+                                    <span>{t("user_menu.unlock_partner_prices")}</span>
                                 </DropdownMenuItem>
                             </>
                         )}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Support</DropdownMenuItem>
+                    <DropdownMenuItem>{t("user_menu.support")}</DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem variant="destructive" onSelect={() => setLogoutOpen(true)}>
-                        Log out
+                        {t("user_menu.log_out")}
                     </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>

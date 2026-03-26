@@ -4,6 +4,8 @@ import { toast } from "sonner";
 import { attemptEmailVerification, sendEmailVerificationCode } from "~/api/http-requests";
 import { EmailVerificationOtp } from "~/components/email-verification-otp";
 import { useSuccessRedirect } from "~/hooks/use-redirect-action";
+import { useTranslation } from "react-i18next";
+import i18n from "~/i18n/i18n";
 
 export const clientAction = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
@@ -12,7 +14,7 @@ export const clientAction = async ({ request }: ActionFunctionArgs) => {
     if (!otp) {
         return {
             errors: {
-                code: ["The code is required"]
+                code: [i18n.t("auth:email_verification.code_required")]
             }
         }
     }
@@ -28,6 +30,7 @@ export const clientAction = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function () {
+    const { t } = useTranslation("auth");
     const error = useActionData();
     const navigate = useNavigate();
     const didSendRef = React.useRef(false);
@@ -37,17 +40,17 @@ export default function () {
         sendEmailVerificationCode()
             .then((response) => {
                 if (response.data?.link_sent) {
-                    toast.success("Email verification code sent!");
+                    toast.success(t("email_verification.success_toast"));
                 } else {
-                    toast.error("Failed to send verification code!");
+                    toast.error(t("email_verification.error_toast"));
                 }
             })
             .catch((error) => {
                 if (error.status === 403) {
                     navigate('/');
-                    toast.error('Your email has already been confirmed!');
+                    toast.error(t("email_verification.already_confirmed"));
                 } else {
-                    toast.error("An error occured, please, try again!")
+                    toast.error(t("email_verification.general_error"))
                 }
             })
     }

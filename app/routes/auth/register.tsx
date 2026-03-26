@@ -11,6 +11,7 @@ import randomString from "~/lib/random-string";
 import { toast } from "sonner";
 import { ValidationException } from "~/api/app-fetch";
 import BackButton from "~/components/back-button";
+import { useTranslation } from "react-i18next";
 
 const dataFormat = {
   password: z.string().min(4),
@@ -30,6 +31,7 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 }
 
 export default function () {
+  const { t } = useTranslation("auth");
   const email = useLoaderData<string>();
 
   const [formValidationErrors, setFormValidationErrors] = useState<{ password?: string[], password_confirmation?: string[] } | null>(null);
@@ -73,7 +75,7 @@ export default function () {
       name: randomString(8),
     })
       .then(response => {
-        toast.success("Register successful!");
+        toast.success(t("register.success_toast"));
 
         if (response.data?.token) {
           localStorage.setItem("token", response.data.token);
@@ -86,7 +88,7 @@ export default function () {
           return setFormValidationErrors(error.errors);
         }
 
-        toast.error(`Failed to register : ${error.status}`, { description: error.data.message });
+        toast.error(`${t("register.error_toast")} : ${error.status}`, { description: error.data.message });
       })
       .finally(() => setIsLoading(false));
   }
@@ -95,14 +97,14 @@ export default function () {
     <BackButton />
     <FieldGroup>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Welcome!</h1>
+        <h1 className="text-2xl font-bold">{t("register.welcome")}</h1>
         <p className="text-muted-foreground text-balance">
-          Create an account for free
+          {t("register.create_account")}
         </p>
       </div>
 
       <CustomField
-        label="Email"
+        label={t("register.email")}
         id="email"
         type="email"
         name="email"
@@ -118,7 +120,7 @@ export default function () {
         dataFormat={dataFormat.password}
         onValidationErrorsChange={handleValidationErrorsChange}
         validationErrors={formValidationErrors?.password}
-        label="Password"
+        label={t("register.password")}
         required
       />
 
@@ -129,13 +131,13 @@ export default function () {
         dataFormat={dataFormat.password}
         onValidationErrorsChange={handleValidationErrorsChange}
         validationErrors={formValidationErrors?.password_confirmation}
-        label="Confirm your password"
+        label={t("register.confirm_password")}
         required
       />
 
       <Field>
         <Button type="submit" disabled={!canSubmit} isLoading={isLoading}>
-          Login
+          {t("register.create_button")}
         </Button>
       </Field>
     </FieldGroup>

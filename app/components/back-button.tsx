@@ -2,13 +2,14 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router";
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 
 type BackButtonProps = {
     path?: string,
 }
 
 export default function ({ path }: BackButtonProps) {
-
+    const { t } = useTranslation("common");
     const navigate = useNavigate();
 
     const handleClick = useCallback(() => {
@@ -27,7 +28,7 @@ export default function ({ path }: BackButtonProps) {
             onClick={handleClick}
         >
             <ArrowLeft className="w-4 h-4" />
-            Back
+            {t("back")}
         </Button>
     </div>
 }

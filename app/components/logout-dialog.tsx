@@ -10,6 +10,7 @@ import {
     DialogTitle,
 } from "~/components/ui/dialog"
 import { useUserStore } from "~/hooks/use-user"
+import { useTranslation } from "react-i18next"
 
 export type LogoutDialogProps = {
     open: boolean,
@@ -18,6 +19,7 @@ export type LogoutDialogProps = {
 
 export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
     const { setUser } = useUserStore();
+    const { t } = useTranslation("auth");
 
     const handleLogout = React.useCallback(() => {
         setUser(null);
@@ -28,19 +30,19 @@ export function LogoutDialog({ open, onOpenChange }: LogoutDialogProps) {
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md" aria-describedby="Confirm logout">
                 <DialogHeader>
-                    <DialogTitle>Logout?</DialogTitle>
+                    <DialogTitle>{t("logout.title")}</DialogTitle>
                     <DialogDescription>
-                        Your session will be terminated!
+                        {t("logout.description")}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose asChild>
                         <Button type="button" variant="secondary">
-                            Close
+                            {t("logout.close")}
                         </Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button variant="destructive" onClick={handleLogout}> Log out</Button>
+                        <Button variant="destructive" onClick={handleLogout}>{t("logout.confirm")}</Button>
                     </DialogClose>
                 </DialogFooter>
             </DialogContent>

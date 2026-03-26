@@ -39,7 +39,10 @@
     "enterNewPassword": "Entrez un nouveau mot de passe",
     "newPassword": "Nouveau Mot de Passe",
     "confirmNewPassword": "Confirmez le nouveau mot de passe",
-    "updatePassword": "Mettre à Jour le Mot de Passe",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "passwordMismatch": "La confirmation du mot de passe ne correspond pas !",
+    "passwordUpdatedSuccess": "Mot de passe mis à jour avec succès !",
+    "passwordUpdateError": "Échec de la mise à jour du mot de passe avec le statut : ",
     "profileUpdatedSuccess": "Profil mis à jour avec succès !",
     "checkFieldErrors": "Vérifiez les erreurs de champ et réessayez.",
     "partnerAccessActive": "Accès Partenaire Actif",
@@ -47,5 +50,18 @@
     "exclusivePricingApplied": "Les prix membres exclusifs sont actuellement appliqués à tous les produits éligibles.",
     "partnerProgram": "Programme Partenaire",
     "unlockWholesalePricing": "Débloquez les prix de gros et exclusifs aux partenaires.",
-    "enterPartnerCode": "Entrer le Code Partenaire"
+    "enterPartnerCode": "Entrer le Code Partenaire",
+    "clientCode": {
+        "title": "Accès Client Partenaire",
+        "description": "Si vous avez un code client, entrez-le ci-dessous pour débloquer des prix exclusifs sur nos produits.",
+        "placeholder": "Entrez votre code (ex: PARTNER20)",
+        "applyCode": "Appliquer le code",
+        "noCode": "Je n'ai pas de code",
+        "successNowSpecial": "Vous êtes maintenant un client spécial !",
+        "errorApply": "Échec de l'application du code client. Veuillez réessayer.",
+        "successSaved": "Code client enregistré ! Il sera appliqué lors de votre connexion.",
+        "invalidCode": "Code client invalide",
+        "errorApplyStatus": "Échec de l'application du code client : ",
+        "checkCodeTryAgain": "Veuillez vérifier votre code et réessayer."
+    }
 }

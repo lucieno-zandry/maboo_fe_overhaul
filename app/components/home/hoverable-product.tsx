@@ -12,7 +12,7 @@ export function HoverableProduct({ product }: HoverableProductProps) {
     const mainImage = product.images?.[0]?.url;
     const variant = product.variants?.[0];
     const price = variant?.price || 0;
-    const specialPrice = variant?.special_price;
+    const specialPrice = variant?.effective_price;
 
     return (
         <div className="w-full max-w-[300px] sm:w-[200px] mb-4 mx-auto group">

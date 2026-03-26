@@ -1,8 +1,11 @@
 import { Outlet } from "react-router"
 import { Card, CardContent } from "~/components/ui/card"
 import { FieldDescription } from "~/components/ui/field"
+import { Trans, useTranslation } from "react-i18next"
 
 export default function() {
+    const { t } = useTranslation("auth");
+    
     return (
         <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-sm md:max-w-4xl">
@@ -20,8 +23,11 @@ export default function() {
                         </CardContent>
                     </Card>
                     <FieldDescription className="px-6 text-center">
-                        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-                        and <a href="#">Privacy Policy</a>.
+                        <Trans 
+                            t={t}
+                            i18nKey="layout.terms_agreement"
+                            components={{ 1: <a href="#" />, 3: <a href="#" /> }}
+                        />
                     </FieldDescription>
                 </div>
             </div>

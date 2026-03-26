@@ -37,7 +37,18 @@
     "noImage": "No Image",
     "subtotal": "Subtotal",
     "remove": "Remove",
+    "back": "Back",
+    "user_menu": {
+        "my_account": "My Account",
+        "addresses": "Addresses",
+        "settings": "Settings",
+        "orders": "Orders",
+        "unlock_partner_prices": "Unlock Partner Prices",
+        "support": "Support",
+        "log_out": "Log out"
+    },
     "updatingCartItem": "Updating cart item...",
+
     "cartItemUpdated": "Cart item updated.",
     "footer": {
         "tagline": "Warm support, harmonious growth",

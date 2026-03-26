@@ -8,6 +8,7 @@ import CustomField from "~/components/custom-components/field";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import BackButton from "~/components/back-button";
+import { useTranslation } from "react-i18next";
 
 const emailFormat = z.email();
 
@@ -27,6 +28,7 @@ export async function clientAction({ request, params }: Route.ClientActionArgs) 
 }
 
 export default function () {
+    const { t } = useTranslation("auth");
     const actionData = useActionData<any>();
     const navigation = useNavigation();
     const isLoading = React.useMemo(() => navigation.state === "submitting", [navigation.state]);
@@ -58,30 +60,30 @@ export default function () {
         <BackButton path="/" />
         <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
+                <h1 className="text-2xl font-bold">{t("index.welcome_back")}</h1>
                 <p className="text-muted-foreground text-balance">
-                    Login to your account
+                    {t("index.login_to_account")}
                 </p>
             </div>
 
             <CustomField
                 validationErrors={actionData?.errors?.email}
-                label="Email"
+                label={t("index.email")}
                 id="email"
                 type="email"
                 name="email"
-                placeholder="username@example.com"
+                placeholder={t("index.email_placeholder")}
                 dataFormat={emailFormat}
                 onValidationErrorsChange={handleValidationErrorsChange}
                 required />
 
             <Field>
                 <Button type="submit" isLoading={isLoading} disabled={!userCanSubmit}>
-                    Continue
+                    {t("index.continue")}
                 </Button>
             </Field>
             <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                Or continue with
+                {t("index.or_continue_with")}
             </FieldSeparator>
             <Field className="grid grid-cols-2 gap-4">
                 <Button variant="outline" type="button">
@@ -91,7 +93,7 @@ export default function () {
                             fill="currentColor"
                         />
                     </svg>
-                    <span className="sr-only">Login with Google</span>
+                    <span className="sr-only">{t("index.login_google")}</span>
                 </Button>
                 <Button variant="outline" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -100,7 +102,7 @@ export default function () {
                             fill="currentColor"
                         />
                     </svg>
-                    <span className="sr-only">Login with Meta</span>
+                    <span className="sr-only">{t("index.login_facebook")}</span>
                 </Button>
             </Field>
         </FieldGroup>

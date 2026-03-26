@@ -8,6 +8,8 @@ import Button from "~/components/custom-components/button";
 import Field from "~/components/custom-components/field";
 import { FieldGroup } from "~/components/ui/field";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
+import { useTranslation } from "react-i18next";
+import i18n from "~/i18n/i18n";
 
 const dataFormat = {
     password: z.string().min(4),
@@ -23,7 +25,7 @@ export const clientAction = async ({ request }: ActionFunctionArgs) => {
     const password = formData.get('password');
     const passwordConfirmation = formData.get('password_confirmation');
 
-    if (password?.toString() !== passwordConfirmation?.toString()) return new ValidationException({ password_confirmation: ["The password confirmation does not match."] }, 422);
+    if (password?.toString() !== passwordConfirmation?.toString()) return new ValidationException({ password_confirmation: [i18n.t("auth:reset_password.password_mismatch")] }, 422);
 
     try {
         const response = await resetPassword(formData);
@@ -35,7 +37,7 @@ export const clientAction = async ({ request }: ActionFunctionArgs) => {
         return redirect('/');
     } catch (error) {
         if (error instanceof HttpException && error.status === 403) {
-            toast.error("You do not have permission to perform this action!");
+            toast.error(i18n.t("auth:reset_password.permission_denied"));
             return redirect('/');
         }
 
@@ -44,6 +46,7 @@ export const clientAction = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function () {
+    const { t } = useTranslation("auth");
     const [formValidationErrors, setFormValidationErrors] = useState<{ password?: string[], password_confirmation?: string[] } | null>(null);
     const navigation = useNavigation();
 
@@ -62,9 +65,9 @@ export default function () {
 
             setFormValidationErrors(error.errors);
         } else {
-            toast.error(`Failed to reset password with status : ${error.status}!`)
+            toast.error(`${t("reset_password.error_toast")} : ${error.status}!`)
         }
-    }, [error]);
+    }, [error, t]);
 
     const handleValidationErrorsChange = useCallback((validationErrors: string[] | null, e: React.FocusEvent<HTMLInputElement, Element>) => {
         const name = e.target.name as "password" | "password_confirmation";
@@ -83,9 +86,9 @@ export default function () {
     return <Form className="p-6 md:p-8" method="post">
         <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Reset your password</h1>
+                <h1 className="text-2xl font-bold">{t("reset_password.reset_password")}</h1>
                 <p className="text-muted-foreground text-balance">
-                    Create a new password for your account
+                    {t("reset_password.create_new_password")}
                 </p>
             </div>
 
@@ -97,7 +100,7 @@ export default function () {
                 dataFormat={dataFormat.password}
                 onValidationErrorsChange={handleValidationErrorsChange}
                 validationErrors={formValidationErrors?.password}
-                label="Password"
+                label={t("reset_password.password")}
                 required />
 
             <Field
@@ -107,13 +110,13 @@ export default function () {
                 dataFormat={dataFormat.password}
                 onValidationErrorsChange={handleValidationErrorsChange}
                 validationErrors={formValidationErrors?.password_confirmation}
-                label="Confirm your password"
+                label={t("reset_password.confirm_password")}
                 required />
 
             <Button
                 type="submit"
                 disabled={!canSubmit}
-                isLoading={isLoading}>Reset password</Button>
+                isLoading={isLoading}>{t("reset_password.reset_button")}</Button>
         </FieldGroup>
     </Form>
 }

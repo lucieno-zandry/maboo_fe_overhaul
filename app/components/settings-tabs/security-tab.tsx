@@ -121,20 +121,20 @@ export default function () {
         e.preventDefault();
 
         if (formData.password !== formData.password_confirmation) {
-            return setValidationMessages({ password_confirmation: ["The password confirmation does not match!"] })
+            return setValidationMessages({ password_confirmation: [t("settings:passwordMismatch")] })
         }
 
         setIsLoading(true);
         updateAuthUser(formData)
             .then(() => {
-                toast.success("Password updated successfuly!");
+                toast.success(t("settings:passwordUpdatedSuccess"));
                 setFormData({ ...formData, password: "", password_confirmation: "" });
             })
             .catch(error => {
                 if (error instanceof ValidationException) {
                     setValidationMessages(error.errors);
                 } else {
-                    toast.error("Failed to update password with status : " + error.status);
+                    toast.error(t("settings:passwordUpdateError") + error.status);
                 }
             })
             .finally(() => {

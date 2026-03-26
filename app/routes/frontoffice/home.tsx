@@ -35,7 +35,7 @@ export async function loader() {
     const response = await getProducts({ limit: 5 });
     // Return first 5 products for Featured Products section
     return {
-      featuredProducts: response.data?.products || []
+      featuredProducts: response.data?.data || []
     };
   } catch (error) {
     console.error("Failed to fetch featured products", error);

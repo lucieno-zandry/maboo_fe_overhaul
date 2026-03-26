@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { ValidationException } from "~/api/app-fetch";
 import BackButton from "~/components/back-button";
 import useRouterStore from "~/hooks/use-router-store";
+import { useTranslation } from "react-i18next";
 
 const dataFormat = {
   email: z.email(),
@@ -32,6 +33,7 @@ export const loader = async ({ request, params }: Route.LoaderArgs) => {
 }
 
 export default function () {
+  const { t } = useTranslation("auth");
   const successRedirect = useSuccessRedirect();
   const email = useLoaderData<string>();
   const [formValidationErrors, setFormValidationErrors] = useState<{ email?: string[], password?: string[] } | null>(null);
@@ -62,7 +64,7 @@ export default function () {
       password: formData.get("password")!
     })
       .then(response => {
-        toast.success("Log in success!");
+        toast.success(t("login.success_toast"));
 
         if (response.data?.token) {
           localStorage.setItem("token", response.data.token);
@@ -75,7 +77,7 @@ export default function () {
           return setFormValidationErrors(error.errors);
         }
 
-        toast.error(`Failed to log in : ${error.status}`, { description: error.data.message });
+        toast.error(`${t("login.error_toast")} : ${error.status}`, { description: error.data.message });
       })
       .finally(() => setIsLoading(false));
   }
@@ -84,14 +86,14 @@ export default function () {
     <BackButton />
     <FieldGroup>
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="text-2xl font-bold">Welcome back!</h1>
+        <h1 className="text-2xl font-bold">{t("login.welcome_back")}</h1>
         <p className="text-muted-foreground text-balance">
-          Login to your account
+          {t("login.login_to_account")}
         </p>
       </div>
 
       <CustomField
-        label="Email"
+        label={t("login.email")}
         id="email"
         type="email"
         name="email"
@@ -112,12 +114,12 @@ export default function () {
         validationErrors={formValidationErrors?.password}
         required>
         <div className="flex items-center">
-          <FieldLabel htmlFor="password">Password</FieldLabel>
+          <FieldLabel htmlFor="password">{t("login.password")}</FieldLabel>
           <Link
             to={`/${lang}/auth/password-forgotten?email=${email}`}
             className="ml-auto text-sm underline-offset-2 hover:underline"
           >
-            Forgot your password?
+            {t("login.forgot_password")}
           </Link>
         </div>
       </CustomField>
@@ -126,10 +128,10 @@ export default function () {
         <Button
           type="submit"
           disabled={!canSubmit}
-          isLoading={isLoading}>Login</Button>
+          isLoading={isLoading}>{t("login.login_button")}</Button>
       </Field>
       <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-        Or continue with
+        {t("index.or_continue_with")}
       </FieldSeparator>
       <Field className="grid grid-cols-2 gap-4">
         <Button variant="outline" type="button">
@@ -139,7 +141,7 @@ export default function () {
               fill="currentColor"
             />
           </svg>
-          <span className="sr-only">Login with Google</span>
+          <span className="sr-only">{t("index.login_google")}</span>
         </Button>
         <Button variant="outline" type="button">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -148,7 +150,7 @@ export default function () {
               fill="currentColor"
             />
           </svg>
-          <span className="sr-only">Login with Meta</span>
+          <span className="sr-only">{t("index.login_facebook")}</span>
         </Button>
       </Field>
     </FieldGroup>

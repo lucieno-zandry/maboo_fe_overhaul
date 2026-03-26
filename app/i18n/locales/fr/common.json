@@ -37,7 +37,18 @@
     "noImage": "Aucune Image",
     "subtotal": "Sous-total",
     "remove": "Retirer",
+    "back": "Retour",
+    "user_menu": {
+        "my_account": "Mon compte",
+        "addresses": "Adresses",
+        "settings": "Paramètres",
+        "orders": "Commandes",
+        "unlock_partner_prices": "Débloquer les prix partenaires",
+        "support": "Support",
+        "log_out": "Se déconnecter"
+    },
     "updatingCartItem": "Mise à jour de l'article...",
+
     "cartItemUpdated": "Article mis à jour.",
     "footer": {
         "tagline": "Soutiens chaleureux, croissance harmonieuse",
