@@ -1,7 +1,6 @@
 import useRedirectAction from "~/hooks/use-redirect-action";
 import redirectPathnames from "./redirect-pathnames";
-import useRouterStore from "~/hooks/use-router-store";
-import isCsr from "./is-csr";
+import appPathname from "./app-pathname";
 
 let redirectLock: ReturnType<typeof setTimeout> | null = null;
 
@@ -17,17 +16,11 @@ const handleActionRedirection = (
 
     const { redirect } = useRedirectAction.getState();
 
-    const lang =
-        useRouterStore.getState().lang ??
-        (isCsr()
-            ? window.location.pathname.split("/")[1]
-            : "en");
-
     if (redirectLock) {
         return;
     }
 
-    redirect(`/${lang}${redirectPathname}`);
+    redirect(appPathname(redirectPathname));
 
     redirectLock = setTimeout(() => {
         redirectLock = null;

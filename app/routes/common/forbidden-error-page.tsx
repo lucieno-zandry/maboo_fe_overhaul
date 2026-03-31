@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router";
 import { LockKeyhole, ShieldCheck, LogOut, ArrowLeft } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import useRouterStore from "~/hooks/use-router-store";
+import appPathname from "~/lib/app-pathname";
 
 export default function () {
     const navigate = useNavigate();
-    const { lang } = useRouterStore();
 
     return (
         <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12">
@@ -42,7 +41,7 @@ export default function () {
                         variant="outline"
                         onClick={() => {
                             // Add your logout/switch logic here
-                            navigate(`/${lang}/auth/login`);
+                            navigate(appPathname(`/auth/login`));
                         }}
                         className="gap-2 px-8"
                     >

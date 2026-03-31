@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 import { TabsContent } from "../ui/tabs";
 import React from "react";
 import { useUserStore } from "~/hooks/use-user";
-import ConfirmEmailChangeDialog from "../confirm-email-change-dialog";
+import ConfirmEmailChangeDialog from "../settings/confirm-email-change-dialog";
 import { updateAuthUser } from "~/api/http-requests";
 import { toast } from "sonner";
 import Field from "../custom-components/field";
@@ -10,10 +10,9 @@ import Button from "../custom-components/button";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import useRedirectAction from "~/hooks/use-redirect-action";
-import { useParams } from "react-router";
-import useRouterStore from "~/hooks/use-router-store";
 import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
+import appPathname from "~/lib/app-pathname";
 
 const dataFormat = {
     email: z.email(),
@@ -127,7 +126,6 @@ export default function () {
     const user = useUserStore((state) => state.user!);
     const { setUser } = useUserStore();
     const { redirect } = useRedirectAction();
-    const { lang } = useRouterStore();
     const { t } = useTranslation("settings");
 
     const [formData, setFormData] = React.useState({
@@ -193,7 +191,7 @@ export default function () {
                 if (response.data?.user) {
                     setUser(response.data.user);
                     toast.success(t('settings:profileUpdatedSuccess'));
-                    return redirect(`/${lang}/auth/verify-email`);
+                    return redirect(appPathname(`/auth/verify-email`));
                 }
             })
             .catch(error => {

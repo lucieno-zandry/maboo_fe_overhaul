@@ -10,17 +10,17 @@ import useDebounce from "~/hooks/use-debounce";
 import { LoadMoreButton } from "~/components/custom-components/load-more-button";
 import { ProductGridSkeleton } from "~/components/product/product-grid-skeleton";
 
-export const loader = async ({ request }: { request: Request }) => {
+export const clientLoader = async ({ request }: { request: Request }) => {
     try {
         const url = new URL(request.url);
         const page = Number(url.searchParams.get("page") ?? 1);
 
         const response = await getProducts({
             page,
-            limit: 12, // adjust per page if needed
+            limit: 12,
         });
 
-        return response.data; // return full pagination object
+        return response.data;
     } catch (error) {
         if (error instanceof HttpException) {
             return handleHttpExceptionError({ status: error.status, navigate: redirect });

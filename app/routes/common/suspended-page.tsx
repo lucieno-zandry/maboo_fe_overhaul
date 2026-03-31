@@ -1,11 +1,11 @@
 import { redirect, useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
 import { Clock, LogOut, ShieldAlert, Calendar } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import useRouterStore from "~/hooks/use-router-store";
 import { getCurrentUserStatus, isUserSuspended } from "~/lib/user-status";
 import { useSuccessRedirect } from "~/hooks/use-redirect-action";
 import { getAuthUser } from "~/api/http-requests";
 import { HttpException } from "~/api/app-fetch";
+import appNavigate from "~/lib/app-navigate";
 
 const successRedirect = useSuccessRedirect();
 
@@ -32,9 +32,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 
 
 export default function SuspendedPage() {
-    const navigate = useNavigate();
-    const { lang } = useRouterStore();
-
     const user = useLoaderData<typeof clientLoader>();
     const status = user ? getCurrentUserStatus(user) : null;
     const expiresAt = status?.expires_at ? new Date(status.expires_at) : null;
@@ -78,7 +75,7 @@ export default function SuspendedPage() {
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <Button
                         variant="outline"
-                        onClick={() => navigate(`/${lang}/auth/login`)}
+                        onClick={() => appNavigate("/auth/login")}
                         className="gap-2 px-8 rounded-xl border-white/10 hover:bg-white/5"
                     >
                         <LogOut className="h-4 w-4" />

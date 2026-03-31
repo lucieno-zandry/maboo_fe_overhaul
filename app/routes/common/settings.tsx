@@ -2,14 +2,14 @@ import React from 'react';
 import { Badge } from '~/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { useUserStore } from '~/hooks/use-user';
-import LoadingScreen from '~/components/loading-screen';
+import LoadingScreen from '~/components/settings/loading-screen';
 import ProfileTab from '~/components/settings-tabs/profile-tab';
 import SecurityTab from '~/components/settings-tabs/security-tab';
 import AccountDetailsTab from '~/components/settings-tabs/account-details-tab';
 import getRoleBadgeColor from '~/lib/get-role-badge-color';
 import AccountCard from '~/components/settings/account-card';
 import { PartnerCodeSettings } from '~/components/settings/partner-code-card';
-import NotFound from '~/components/not-found';
+import NotFound from '~/components/common/not-found';
 import { useTranslation } from 'react-i18next';
 
 export type SettingsTabProps = {

@@ -8,14 +8,14 @@ import { RefundRequestBadge } from "./refund-request-badge";
 import { CancelDisputeButton } from "./cancel-dispute-button";
 import { RefundRequestDialog } from "./refund-request-dialog";
 import { DisputeDialog } from "./dispute-dialog";
+import formatDate from "~/lib/format-date";
 
 interface TransactionCardProps {
     transaction: Transaction;
-    lang: string;
     onActionComplete: () => void;
 }
 
-export function TransactionCard({ transaction, lang, onActionComplete }: TransactionCardProps) {
+export function TransactionCard({ transaction, onActionComplete }: TransactionCardProps) {
     const [showRefundDialog, setShowRefundDialog] = useState(false);
     const [showDisputeDialog, setShowDisputeDialog] = useState(false);
 
@@ -47,7 +47,7 @@ export function TransactionCard({ transaction, lang, onActionComplete }: Transac
                     </div>
                     <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Date</span>
-                        <span>{new Date(transaction.created_at).toLocaleDateString(lang)}</span>
+                        <span>{formatDate(transaction.created_at)}</span>
                     </div>
 
                     {/* Dispute status */}

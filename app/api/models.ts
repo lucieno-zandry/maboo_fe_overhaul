@@ -33,6 +33,7 @@ type User = {
   reviewed_transactions?: Transaction[],
   statuses?: UserStatus[],
   set_statuses?: UserStatus[],
+  preferences?: UserPreference,
 };
 
 type UserStatus = {
@@ -465,4 +466,17 @@ type ClientCode = {
 
   // Joined relationships
   users?: User[],
+};
+
+type UserPreference = {
+  id: number;
+  user_id: number;
+  theme: 'light' | 'dark' | 'system';
+  language: string;
+  timezone: string;
+  currency: string;
+  created_at: string;
+  updated_at: string;
+
+  user?: User;
 };

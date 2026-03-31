@@ -8,7 +8,7 @@ import CustomField from "~/components/custom-components/field";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { toast } from "sonner";
-import BackButton from "~/components/back-button";
+import BackButton from "~/components/custom-components/back-button";
 import { useTranslation } from "react-i18next";
 import i18n from "~/i18n/i18n";
 

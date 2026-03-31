@@ -7,7 +7,7 @@ import React from "react";
 import CustomField from "~/components/custom-components/field";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
-import BackButton from "~/components/back-button";
+import BackButton from "~/components/custom-components/back-button";
 import { useTranslation } from "react-i18next";
 
 const emailFormat = z.email();

@@ -2,7 +2,7 @@ import React from "react";
 import { redirect, useActionData, useNavigate, type ActionFunctionArgs } from "react-router";
 import { toast } from "sonner";
 import { attemptEmailVerification, sendEmailVerificationCode } from "~/api/http-requests";
-import { EmailVerificationOtp } from "~/components/email-verification-otp";
+import { EmailVerificationOtp } from "~/components/auth/email-verification-otp";
 import { useSuccessRedirect } from "~/hooks/use-redirect-action";
 import { useTranslation } from "react-i18next";
 import i18n from "~/i18n/i18n";

@@ -10,8 +10,9 @@ import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import randomString from "~/lib/random-string";
 import { toast } from "sonner";
 import { ValidationException } from "~/api/app-fetch";
-import BackButton from "~/components/back-button";
+import BackButton from "~/components/custom-components/back-button";
 import { useTranslation } from "react-i18next";
+import { usePreferencesStore } from "~/hooks/use-user-preference-store";
 
 const dataFormat = {
   password: z.string().min(4),
@@ -46,6 +47,8 @@ export default function () {
   const navigate = useNavigate();
   const { lang = 'en' } = useParams();
 
+  const { currency, language, theme, timezone } = usePreferencesStore((state) => state.preferences);
+
   const handleValidationErrorsChange = React.useCallback((validationErrors: string[] | null, e: React.FocusEvent<HTMLInputElement, Element>) => {
     const name = e.target.name as "password" | "password_confirmation";
 
@@ -73,6 +76,10 @@ export default function () {
       password: formData.get("password")!,
       password_confirmation: formData.get("password_confirmation")!,
       name: randomString(8),
+      preferred_currency: currency,
+      preferred_language: language,
+      preferred_timezone: timezone,
+      preferred_theme: theme,
     })
       .then(response => {
         toast.success(t("register.success_toast"));

@@ -1,6 +1,6 @@
 import { HttpException, ValidationException, type FormatedResponse } from "~/api/app-fetch";
 import handleActionRedirection from "./handle-action-redirection";
-import handleNotFound from "./handleNotFound";
+import handleNotFound from "./handle-not-found";
 
 async function executeRequest<T>(request: () => Promise<Response>) {
     const formatedResponse: FormatedResponse<T> = {

@@ -1,4 +1,5 @@
 import i18next from "i18next";
+import { defaultPreference } from "~/hooks/use-user-preference-store";
 import buildQuery from "~/lib/build-query";
 import executeRequest from "~/lib/execute-request";
 import isCsr from "~/lib/is-csr";
@@ -85,9 +86,14 @@ async function get<T>(
 ): Promise<FormatedResponse<T>> {
     const { params, ...init } = options;
 
+    const searchParams = new URLSearchParams(location.search);
+    const currency = searchParams.get('currency') || defaultPreference.currency;
+
     if (!options.headers) {
         init.headers = defaultHeaders();
     }
+
+    init.headers!['X-currency' as keyof HeadersInit] = currency;
 
     const url = buildQuery(path, params);
 

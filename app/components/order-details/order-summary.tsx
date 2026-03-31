@@ -7,15 +7,12 @@ import { createTransaction } from "~/api/http-requests";
 import { toast } from "sonner";
 import Button from "../custom-components/button";
 import { DeleteOrderDialog } from "~/components/orders/delete-order-dialog";
-import { useNavigate } from "react-router";
-import useRouterStore from "~/hooks/use-router-store";
+import appNavigate from "~/lib/app-navigate";
 
 function OrderSummary({ order, statusConfig, method }: { order: Order; statusConfig: any; method: Transaction['method'] }) {
-    const navigate = useNavigate();
     const subtotal = order.cart_items?.reduce((acc, item) => acc + item.total, 0) ?? 0;
     const [loading, setLoading] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const { lang } = useRouterStore();
 
     const handlePay = () => {
         setLoading(true);
@@ -38,7 +35,7 @@ function OrderSummary({ order, statusConfig, method }: { order: Order; statusCon
     }
 
     const handleDeleteSuccess = () => {
-        navigate(`/${lang}/orders`);
+        appNavigate("/orders");
     };
 
     return (

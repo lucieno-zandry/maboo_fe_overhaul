@@ -2,12 +2,13 @@ import { Link } from "react-router";
 import { Calendar, ChevronLeft } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import appPathname from "~/lib/app-pathname";
 
-function OrderHeader({ order, statusConfig, lang }: { order: Order; statusConfig: any; lang: string }) {
+function OrderHeader({ order, statusConfig }: { order: Order; statusConfig: any }) {
     return (
         <div className="flex flex-col gap-4">
             <Button variant="ghost" size="sm" asChild className="w-fit -ml-2 text-muted-foreground">
-                <Link to={`/${lang}/orders`}><ChevronLeft className="w-4 h-4 mr-1" /> Back to Orders</Link>
+                <Link to={appPathname(`/orders`)}><ChevronLeft className="w-4 h-4 mr-1" /> Back to Orders</Link>
             </Button>
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>

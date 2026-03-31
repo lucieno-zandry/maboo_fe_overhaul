@@ -1,4 +1,3 @@
-import { useNavigate, type NavigateFunction } from "react-router";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Bell } from "lucide-react";
 import NotificationsSkeleton from "./notifications-skeleton";
@@ -7,18 +6,16 @@ import { cn } from "~/lib/utils";
 import NotificationsEmpty from "./notifications-empty";
 import { Button } from "../ui/button";
 import { ShipmentItem, SystemItem, TransactionItem } from "./notification-item";
-import useRouterStore from "~/hooks/use-router-store";
 import type { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
+import appNavigate from "~/lib/app-navigate";
 
 export type NotificationsPopoverProps = {
     notifications: AppNotification[] | null;
     unreadCount: number;
     onMarkAllAsRead?: () => void;
     onRemove?: (id: string) => Promise<void>;
-    lang: string;
     handleAction?: (n: AppNotification) => void;
-    navigate: NavigateFunction,
     t: TFunction,
 };
 
@@ -27,9 +24,7 @@ export function NotificationsPopover({
     notifications,
     onMarkAllAsRead,
     onRemove,
-    lang,
     handleAction,
-    navigate,
     t
 }: NotificationsPopoverProps) {
     return (
@@ -108,7 +103,7 @@ export function NotificationsPopover({
                 </ScrollArea>
 
                 <div className="border-t p-2 bg-muted/5">
-                    <Button variant="ghost" className="w-full text-xs h-9 justify-center font-medium" onClick={() => navigate(`/${lang}/${notifications}`)}>
+                    <Button variant="ghost" className="w-full text-xs h-9 justify-center font-medium" onClick={() => appNavigate(`/${notifications}`)}>
                         {t('common:viewAllActivity')}
                     </Button>
                 </div>
@@ -117,23 +112,18 @@ export function NotificationsPopover({
     );
 }
 export default function ({ onMarkAsRead, ...props }: Omit<NotificationsPopoverProps, "lang" | "navigate" | "handleAction" | 't'> & { onMarkAsRead?: (id: string) => void }) {
-    const { lang } = useRouterStore();
     const { t } = useTranslation();
-
-    const navigate = useNavigate();
 
     const handleAction = (n: AppNotification) => {
         onMarkAsRead?.(n.id);
 
         // 2. Handle Navigation based on type
         if (n.data.notification_type === "transaction" || n.data.notification_type === "shipment") {
-            navigate(`/${lang}/orders/${n.data.order_uuid}`);
+            appNavigate(`/orders/${n.data.order_uuid}`);
         }
     };
 
     return <NotificationsPopover
-        lang={lang}
         handleAction={handleAction}
-        navigate={navigate}
         t={t} {...props} />
 }

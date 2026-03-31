@@ -1,8 +1,7 @@
-// routes/root-redirect.tsx
-import i18n from "~/i18n/i18n";
-import { redirect } from "react-router";
+import { redirect, type LoaderFunctionArgs } from "react-router";
+import appPathname, { getPreferencesFromLoaderFunctionArgs } from "~/lib/app-pathname";
 
-export function loader() {
-    const lang = i18n.resolvedLanguage ?? "en";
-    return redirect(`/${lang}`);
+export function loader(args: LoaderFunctionArgs) {
+    const { language } = getPreferencesFromLoaderFunctionArgs(args);
+    return redirect(`/${language}`);
 }

@@ -1,8 +1,6 @@
 import type { NavigateFunction, RedirectFunction } from "react-router";
-import useRouterStore from "~/hooks/use-router-store";
+import appPathname from "./app-pathname";
 
 export default (cartItemIds: number[], navigate: NavigateFunction | RedirectFunction) => {
-    const { lang } = useRouterStore.getState();
-
-    return navigate(`/${lang}/checkout?cartItemIds=${Array.from(cartItemIds).join(',')}`);
+    return navigate(appPathname(`/checkout?cartItemIds=${Array.from(cartItemIds).join(',')}`));
 }

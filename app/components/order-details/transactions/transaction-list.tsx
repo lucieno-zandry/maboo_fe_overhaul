@@ -2,11 +2,10 @@ import { TransactionCard } from "./transaction-card";
 
 interface TransactionListProps {
     transactions: Transaction[];
-    lang: string;
     onActionComplete: () => void; // to refresh data
 }
 
-export function TransactionList({ transactions, lang, onActionComplete }: TransactionListProps) {
+export function TransactionList({ transactions, onActionComplete }: TransactionListProps) {
     if (!transactions.length) return null;
 
     return (
@@ -16,7 +15,6 @@ export function TransactionList({ transactions, lang, onActionComplete }: Transa
                 <TransactionCard
                     key={tx.uuid}
                     transaction={tx}
-                    lang={lang}
                     onActionComplete={onActionComplete}
                 />
             ))}

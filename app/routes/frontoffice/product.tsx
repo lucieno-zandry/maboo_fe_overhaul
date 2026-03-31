@@ -12,7 +12,7 @@ import { useRefreshCart } from "~/hooks/use-cart";
 import { useUserStore } from "~/hooks/use-user";
 import { useTranslation } from "react-i18next";
 import { addVariantToCart, getProduct } from "~/api/http-requests";
-import NotFound from "~/components/not-found";
+import NotFound from "~/components/common/not-found";
 import navigateToCheckout from "~/lib/navigate-to-checkout";
 import { ProductImageGallery } from "~/components/product/product-image-gallery";
 import { ProductInfo } from "~/components/product/product-info";

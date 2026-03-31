@@ -1,9 +1,10 @@
 import { Link } from "react-router";
-import { Card, CardHeader, CardTitle } from "~/components/ui/card";
+import { CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Package, ChevronRight, Trash2 } from "lucide-react";
 import formatMoney from "~/lib/format-money";
 import { OrderStatusBadge } from "./order-status-badge";
+import appPathname from "~/lib/app-pathname";
 
 interface OrderCardHeaderProps {
     order: Order;
@@ -11,10 +12,9 @@ interface OrderCardHeaderProps {
         colorClass: string;
     };
     onDelete: () => void;
-    lang: string
 }
 
-export function OrderCardHeader({ order, statusConfig, onDelete, lang }: OrderCardHeaderProps) {
+export function OrderCardHeader({ order, statusConfig, onDelete }: OrderCardHeaderProps) {
     const date = new Date(order.created_at).toLocaleDateString("en-US", {
         month: "long",
         day: "numeric",
@@ -58,7 +58,7 @@ export function OrderCardHeader({ order, statusConfig, onDelete, lang }: OrderCa
                             <Trash2 className="w-4 h-4" />
                         </Button>
                         <Button variant="ghost" size="icon" asChild>
-                            <Link to={`/${lang}/orders/${order.uuid}`}>
+                            <Link to={appPathname(`/orders/${order.uuid}`)}>
                                 <ChevronRight className="w-5 h-5" />
                             </Link>
                         </Button>

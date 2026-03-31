@@ -17,16 +17,20 @@ export function registerUser(data: {
     email: FormDataEntryValue,
     password: FormDataEntryValue,
     password_confirmation: FormDataEntryValue,
-    name: string
+    name: string,
+    preferred_language: string,
+    preferred_currency: string,
+    preferred_timezone: string,
+    preferred_theme: string,
 }) {
     return appFetch.post<{
         auth: User,
         token: string,
-    }>('/auth/register', data)
+    }>('/auth/register', data);
 }
 
 export function getAuthUser() {
-    return appFetch.get<{ user: User }>('/auth/user/get');
+    return appFetch.get<{ user: User }>('/auth/user/get?with=preferences');
 }
 
 export function updateAuthUser(payload: {
@@ -40,12 +44,13 @@ export function updateAuthUser(payload: {
     return appFetch.post<{ user: User }>('/auth/user/update', payload);
 }
 
-export function getProducts(params?: ProductQueryParams) {
+export function getProducts(params?: ProductQueryParams, options: RequestInit = {}) {
     return appFetch.get<PaginatedResponse<Product>>('/product/all', {
         params: serializeProductParams({
             with: ['variants', 'images', 'category'],
             ...params,
         }),
+        ...options
     });
 }
 
@@ -177,10 +182,6 @@ export function markNotificationAsRead(id: string) {
     }>(`/notifications/${id}/read`, {});
 }
 
-export function searchProducts(keywords: string) {
-    return appFetch.get<{ products: Product[] }>(`/product/search/${keywords}?with=category,variants,images`);
-}
-
 export function deleteOrder(uuid: string) {
     return appFetch.delete<{ message: string }>(`/order/delete?order_uuids=${uuid}`);
 }
@@ -211,4 +212,14 @@ export function cancelDispute(transactionUuid: string) {
     return appFetch.delete<{ transaction: Transaction }>(
         `/transactions/${transactionUuid}/dispute`
     );
+}
+
+// user preferences
+
+export function fetchUserPreferences() {
+    return appFetch.get<{ preferences?: UserPreference }>('/user/preferences');
+}
+
+export function updateUserPreferences(data: Partial<UserPreference>) {
+    return appFetch.put<{ preferences: UserPreference }>('/user/preferences', data);
 }

@@ -1,11 +1,11 @@
-import { redirect, useLoaderData, useNavigate, type LoaderFunctionArgs } from "react-router";
+import { redirect, useLoaderData, type LoaderFunctionArgs } from "react-router";
 import { Ban, LogOut, ShieldAlert } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import useRouterStore from "~/hooks/use-router-store";
 import { getCurrentUserStatus, isUserBlocked } from "~/lib/user-status";
 import { useSuccessRedirect } from "~/hooks/use-redirect-action";
 import { getAuthUser } from "~/api/http-requests";
 import { HttpException } from "~/api/app-fetch";
+import appNavigate from "~/lib/app-navigate";
 
 const successRedirect = useSuccessRedirect();
 
@@ -31,8 +31,6 @@ export async function clientLoader({ params }: LoaderFunctionArgs) {
 }
 
 export default function BlockedPage() {
-    const navigate = useNavigate();
-    const { lang } = useRouterStore();
     const user = useLoaderData<typeof clientLoader>();
 
     const status = user ? getCurrentUserStatus(user) : null;
@@ -69,7 +67,7 @@ export default function BlockedPage() {
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                     <Button
                         variant="outline"
-                        onClick={() => navigate(`/${lang}/auth/login`)}
+                        onClick={() => appNavigate("/auth/login")}
                         className="gap-2 px-8 rounded-xl border-white/10 hover:bg-white/5"
                     >
                         <LogOut className="h-4 w-4" />

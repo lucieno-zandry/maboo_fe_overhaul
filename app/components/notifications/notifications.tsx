@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import useNotificationStore from "~/hooks/use-notification-store";
 import NotificationsPopover from "./notifications-popover";
-import useRouterStore from "~/hooks/use-router-store";
 
 export default function Notifications() {
   const {
@@ -12,8 +11,6 @@ export default function Notifications() {
     markAllAsRead,
     remove
   } = useNotificationStore();
-
-  const { lang } = useRouterStore();
 
   useEffect(() => {
     fetchNotifications();

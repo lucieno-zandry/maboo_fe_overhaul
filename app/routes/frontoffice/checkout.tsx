@@ -6,7 +6,7 @@ import PaymentMethod from "~/components/checkout/payment-method";
 import { OrderReview } from "~/components/checkout/order-review";
 import Button from "~/components/custom-components/button";
 import StepWrapper from "~/components/custom-components/step-wrapper";
-import { redirect, useLoaderData, useNavigate, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+import { redirect, useLoaderData, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
 import { createAddress, createOrder, createTransaction, getCartItems } from "~/api/http-requests";
 import useAddressStore from "~/hooks/use-address-store";
 import { toast } from "sonner";
@@ -14,10 +14,10 @@ import useCheckoutStore from "~/hooks/use-checkout-store";
 import OrderSummary from "~/components/checkout/order-summary";
 import { useRefreshCart } from "~/hooks/use-cart";
 import { HttpException, ValidationException, type FormatedResponse } from "~/api/app-fetch";
-import useRouterStore from "~/hooks/use-router-store";
 import { useTranslation } from "react-i18next";
 import i18next, { type TFunction } from "i18next";
 import type { WhereInConditions } from "~/lib/build-where-param";
+import appNavigate from "~/lib/app-navigate";
 
 type Step = "address" | "payment" | "review";
 
@@ -170,12 +170,9 @@ export default function () {
     const { selectedAddressId } = useAddressStore();
     const { appliedCoupon, setAppliedCoupon, setCartItemsIds, method } = useCheckoutStore();
     const { cartItems, setCartItems } = useCheckoutStore();
-    const { lang } = useRouterStore();
     const { t } = useTranslation("checkout");
 
     const cartItemsIds = useMemo(() => cartItems.map((item) => item.id) || [], [cartItems]);
-
-    const navigate = useNavigate();
     const refreshCart = useRefreshCart();
 
     const subtotal = useMemo(() => {
@@ -229,7 +226,7 @@ export default function () {
                         }
 
                         setCartItems([]);
-                        navigate(`/${lang}/orders/${response.data.order.uuid}`);
+                        appNavigate(`/orders/${response.data.order.uuid}`);
                     }
                 }
             })

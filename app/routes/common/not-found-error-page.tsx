@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router";
 import { MoveLeft, Home, FileQuestion } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import useRouterStore from "~/hooks/use-router-store";
+import appPathname from "~/lib/app-pathname";
 
 export default function () {
   const navigate = useNavigate();
-  const { lang } = useRouterStore();
 
   return (
     <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12">
@@ -37,7 +36,7 @@ export default function () {
           </Button>
 
           <Button
-            onClick={() => navigate("/")}
+            onClick={() => navigate(appPathname("/"))}
             className="gap-2"
           >
             <Home className="h-4 w-4" />
@@ -52,13 +51,13 @@ export default function () {
           </p>
           <div className="grid grid-cols-2 gap-4">
             <button
-              onClick={() => navigate("support")}
+              onClick={() => navigate(appPathname("/support"))}
               className="text-sm text-left hover:text-primary transition-colors font-medium"
             >
               Contact Support
             </button>
             <button
-              onClick={() => navigate(`/${lang}/orders`)}
+              onClick={() => navigate(appPathname("/orders"))}
               className="text-sm text-left hover:text-primary transition-colors font-medium"
             >
               View Recent Orders
