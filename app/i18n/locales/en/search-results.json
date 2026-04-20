@@ -28,5 +28,17 @@
     "noProductsFound": "No products found",
     "tryAdjusting": "Try adjusting your search or filters",
     "errorLoading": "Failed to load products. Please try again.",
-    "tryAgain": "Try Again"
+    "tryAgain": "Try Again",
+    "reset": "Reset",
+    "gridView": "Grid view",
+    "listView": "List view",
+    "to": "to",
+    "priceRangeNotAvailable": "Price range not available",
+    "tryAdjustingOrClearing": "Try adjusting or clearing your filters to see more results.",
+    "noProductsAvailable": "There are no products available at this time.",
+    "noVariants": "No variants",
+    "searchProducts": "Search products…",
+    "categoryWithId": "Category #{{id}}",
+    "priceTag": "Price: {{min}} – {{max}}",
+    "sortTag": "Sort: {{label}}"
 }

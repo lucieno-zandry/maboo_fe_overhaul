@@ -7,7 +7,7 @@ export default function SearchRoute() {
 // Optional: set a document title
 export function meta() {
     return [
-        { title: "Search Products" },
-        { name: "description", content: "Browse and filter our product catalog" },
+        { title: "Alofo - Recherche" },
+        { name: "description", content: "Recherchez et parcourez notre catalogue de produits" },
     ];
 }

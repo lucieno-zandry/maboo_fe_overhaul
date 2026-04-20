@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { PriceDisplay } from "./price-display";
 import { ProductImage } from "./product-image";
 import { PromotionPill } from "./promotion-pill";
+import { useTranslation } from "react-i18next";
 
 export function GridCard({
     product,
@@ -12,6 +13,7 @@ export function GridCard({
     product: Product;
     onAddToCart: (variantId: number) => void;
 }) {
+    const { t } = useTranslation("search_results");
     const defaultVariant = product.variants?.[0];
     const allPromotions =
         product.variants?.flatMap((v) => v.applied_promotions ?? []) ?? [];

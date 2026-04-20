@@ -67,5 +67,14 @@
         "contact": {
             "title": "Contactez-nous sur"
         }
-    }
+    },
+    "searchPlaceholderNav": "Rechercher des produits, catégories…",
+    "category": "Catégorie",
+    "categories": "Catégories",
+    "product": "Produit",
+    "recentSearches": "Recherches récentes",
+    "noResultsFor": "Aucun résultat pour",
+    "pressEnterToSearchAnyway": "Appuyez sur Entrée pour rechercher quand même",
+    "searchAction": "Rechercher",
+    "clearAll": "Tout effacer"
 }

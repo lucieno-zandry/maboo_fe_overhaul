@@ -114,7 +114,7 @@ export default function Home() {
         >
           <div className="container mx-auto px-4 md:px-12">
             <div className="max-w-3xl text-white">
-              <h1 className="text-4xl md:text-6xl font-normal text-secondary mb-6 leading-tight">
+              <h1 className="text-4xl md:text-6xl font-normal text-[#F2C572] mb-6 leading-tight">
                 {t("hero.title")}
               </h1>
               <p className="text-gray-100 text-lg md:text-xl mb-8 leading-relaxed max-w-2xl">

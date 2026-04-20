@@ -28,5 +28,17 @@
     "noProductsFound": "Aucun produit trouvé",
     "tryAdjusting": "Essayez d'ajuster votre recherche ou vos filtres",
     "errorLoading": "Échec du chargement des produits. Veuillez réessayer.",
-    "tryAgain": "Réessayer"
+    "tryAgain": "Réessayer",
+    "reset": "Réinitialiser",
+    "gridView": "Vue en grille",
+    "listView": "Vue en liste",
+    "to": "à",
+    "priceRangeNotAvailable": "Fourchette de prix non disponible",
+    "tryAdjustingOrClearing": "Essayez d'ajuster ou d'effacer vos filtres pour voir plus de résultats.",
+    "noProductsAvailable": "Il n'y a aucun produit disponible pour le moment.",
+    "noVariants": "Aucune variante",
+    "searchProducts": "Rechercher des produits…",
+    "categoryWithId": "Catégorie #{{id}}",
+    "priceTag": "Prix : {{min}} – {{max}}",
+    "sortTag": "Trier : {{label}}"
 }

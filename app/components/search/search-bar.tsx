@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSearchStore } from "~/hooks/use-search-store";
 import { Input } from "../ui/input";
 import { cn } from "~/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export interface SearchBarViewProps {
     value: string;
@@ -14,16 +15,19 @@ export interface SearchBarViewProps {
 export function SearchBarView({
     value,
     onChange,
-    placeholder = "Search products…",
+    placeholder,
     className,
 }: SearchBarViewProps) {
+    const { t } = useTranslation("search_results");
+    const finalPlaceholder = placeholder || t("searchProducts");
+
     return (
         <div className={cn("relative flex items-center", className)}>
             <Search className="absolute left-3 size-4 text-muted-foreground pointer-events-none" />
             <Input
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                placeholder={placeholder}
+                placeholder={finalPlaceholder}
                 className="h-10 pl-9 pr-9 text-sm"
             />
             {value && (

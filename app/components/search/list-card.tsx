@@ -5,6 +5,7 @@ import { Badge } from "../ui/badge";
 import { PriceDisplay } from "./price-display";
 import { ProductImage } from "./product-image";
 import { PromotionPill } from "./promotion-pill";
+import { useTranslation } from "react-i18next";
 
 export function ListCard({
     product,
@@ -13,6 +14,7 @@ export function ListCard({
     product: Product;
     onAddToCart: (variantId: number) => void;
 }) {
+    const { t } = useTranslation("search_results");
     const defaultVariant = product.variants?.[0];
     const allPromotions =
         product.variants?.flatMap((v) => v.applied_promotions ?? []) ?? [];

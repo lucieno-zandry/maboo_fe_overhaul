@@ -12,8 +12,9 @@ import { useUserStore } from "~/hooks/use-user";
 import { getClientCode, updateAuthUser } from "~/api/http-requests";
 import { ValidationException } from "~/api/app-fetch";
 import { toast } from "sonner";
-import Button from "~/components/custom-components/button";
-import CustomField from "~/components/custom-components/field";
+import { Button } from "~/components/ui/button";
+import { Field, FieldError, FieldLabel, FieldGroup } from "~/components/ui/field";
+import { Input } from "~/components/ui/input";
 import z from "zod";
 import getUpdatedFormErrors from "~/lib/get-updated-form-errors";
 import { useRevalidator } from "react-router";
@@ -82,7 +83,7 @@ export function ClientCodeDialog() {
         setIsOpen(false);
     };
 
-    const handleFormValidationChange = (validationErrors: string[] | null, e: FocusEvent<HTMLInputElement, Element>) => {
+    const handleFormValidationChange = (validationErrors: string[] | null, e: FocusEvent<HTMLInputElement>) => {
         const updatedFormValidationErrors = getUpdatedFormErrors({
             formErrors: formValidationErrors,
             name: e.target.name as "code",
@@ -144,28 +145,31 @@ export function ClientCodeDialog() {
                     </DialogHeader>
 
                     <div className="grid gap-4 py-4">
-                        <CustomField
-                            name="code"
-                            id="code"
-                            placeholder={t("clientCode.placeholder")}
-                            value={code}
-                            onChange={(e) => setCode(e.target.value.toUpperCase())}
-                            className="text-center font-mono uppercase tracking-widest"
-                            dataFormat={dataFormat.code}
-                            validationErrors={formValidationErrors?.code}
-                            onValidationErrorsChange={handleFormValidationChange}
-                            required
-                        />
+                        <Field>
+                            <Input
+                                name="code"
+                                id="code"
+                                placeholder={t("clientCode.placeholder")}
+                                value={code}
+                                onChange={(e) => setCode(e.target.value.toUpperCase())}
+                                onBlur={(e) => {
+                                    const res = dataFormat.code.safeParse(e.target.value);
+                                    handleFormValidationChange(res.success ? null : res.error.issues.map((err: any) => err.message), e);
+                                }}
+                                className="text-center font-mono uppercase tracking-widest"
+                                required
+                            />
+                            <FieldError errors={formValidationErrors?.code?.map(msg => ({ message: msg }))} />
+                        </Field>
                     </div>
 
                     <DialogFooter className="flex flex-col sm:flex-col gap-2">
                         <Button
                             className="w-full"
                             type="submit"
-                            isLoading={isLoading}
-                            disabled={!canSubmit}
+                            disabled={!canSubmit || isLoading}
                         >
-                            {t("clientCode.applyCode")}
+                            {isLoading ? "..." : t("clientCode.applyCode")}
                         </Button>
                         <Button
                             variant="ghost"

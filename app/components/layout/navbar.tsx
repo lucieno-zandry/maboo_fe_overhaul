@@ -27,8 +27,8 @@ export function NavbarView({ isAuthenticated, isUnAuthenticated, t, navbarSearch
         <header className="flex flex-wrap justify-between items-center px-4 sm:px-8 py-3 shadow-sm bg-white/95 backdrop-blur-sm sticky top-0 z-50 gap-4 border-b border-gray-100">
             <div className="flex items-center gap-4 md:gap-8">
                 <h1>
-                    <Link to={appPathname('/')} className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 transition-colors hover:text-gray-700">
-                        ShopEase
+                    <Link to={appPathname('/')} className="flex items-center gap-2">
+                        <img src="/maboo-logo.jpg" alt="Maboo" className="h-12 w-auto object-contain" />
                     </Link>
                 </h1>
                 <nav className="space-x-6 hidden lg:block">

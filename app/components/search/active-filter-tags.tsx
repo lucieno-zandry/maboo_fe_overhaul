@@ -2,6 +2,7 @@ import { SORT_OPTIONS, useSearchStore } from "~/hooks/use-search-store";
 import { Badge } from "../ui/badge";
 import { X } from "lucide-react";
 import formatMoney from "~/lib/format-money";
+import { useTranslation } from "react-i18next";
 
 export interface ActiveFilterTag {
     key: string;
@@ -42,6 +43,7 @@ export function ActiveFilterTags() {
     const categories = useSearchStore((s) => s.categories);
     const priceRangeMeta = useSearchStore((s) => s.priceRangeMeta);
     const setFilter = useSearchStore((s) => s.setFilter);
+    const { t } = useTranslation("search_results");
 
     const tags: ActiveFilterTag[] = [];
 
@@ -57,7 +59,7 @@ export function ActiveFilterTags() {
         const cat = categories.find((c) => c.id === filters.category_id);
         tags.push({
             key: "category",
-            label: cat?.title ?? `Category #${filters.category_id}`,
+            label: cat?.title ?? t("categoryWithId", { id: filters.category_id }),
             onRemove: () => setFilter("category_id", undefined),
         });
     }
@@ -76,7 +78,7 @@ export function ActiveFilterTags() {
         const maxLabel = hasMaxPrice ? formatMoney(filters.max_price) : "max";
         tags.push({
             key: "price",
-            label: `Price: ${minLabel} – ${maxLabel}`,
+            label: t("priceTag", { min: minLabel, max: maxLabel }),
             onRemove: () => {
                 setFilter("min_price", undefined);
                 setFilter("max_price", undefined);
@@ -85,9 +87,16 @@ export function ActiveFilterTags() {
     }
 
     if (filters.sortIndex !== 0) {
+        const sortOptionLabels: Record<string, string> = {
+            "Newest first": t("newestFirst"),
+            "Oldest first": t("oldestFirst"),
+            "Name A → Z": t("nameAZ"),
+            "Name Z → A": t("nameZA"),
+        };
+        const rawLabel = SORT_OPTIONS[filters.sortIndex].label;
         tags.push({
             key: "sort",
-            label: `Sort: ${SORT_OPTIONS[filters.sortIndex].label}`,
+            label: t("sortTag", { label: sortOptionLabels[rawLabel] || rawLabel }),
             onRemove: () => setFilter("sortIndex", 0),
         });
     }

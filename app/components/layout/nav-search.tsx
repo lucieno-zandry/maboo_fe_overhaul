@@ -15,6 +15,7 @@ import { getCategories, getProducts } from "~/api/http-requests";
 import { Search, X, ArrowRight, Tag, Package, Clock, Loader2, TrendingUp } from "lucide-react";
 import { cn } from "~/lib/utils";
 import appNavigate from "~/lib/app-navigate";
+import { useTranslation } from "react-i18next";
 
 export interface NavSearchViewProps {
     value: string;
@@ -46,6 +47,7 @@ function SuggestionRow({
     active: boolean;
     onSelect: () => void;
 }) {
+    const { t } = useTranslation("common");
     return (
         <button
             onMouseDown={(e) => { e.preventDefault(); onSelect(); }} // preventDefault keeps input focused
@@ -88,7 +90,7 @@ function SuggestionRow({
                     ? "bg-violet-500/10 text-violet-600 dark:text-violet-400"
                     : "bg-primary/10 text-primary"
             )}>
-                {suggestion.type === "category" ? "Category" : "Product"}
+                {suggestion.type === "category" ? t("category") : t("product")}
             </span>
         </button>
     );
@@ -124,6 +126,7 @@ export function NavSearchView({
     onRemoveRecent,
     onClear,
 }: NavSearchViewProps) {
+    const { t } = useTranslation("common");
     const productSuggestions = suggestions.filter((s) => s.type === "product");
     const categorySuggestions = suggestions.filter((s) => s.type === "category");
     const hasAnySuggestions = suggestions.length > 0;
@@ -156,7 +159,7 @@ export function NavSearchView({
                     onChange={(e) => onChange(e.target.value)}
                     onFocus={onFocus}
                     onKeyDown={onKeyDown}
-                    placeholder="Search products, categories…"
+                    placeholder={t("searchPlaceholderNav")}
                     className="h-10 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground/70"
                     autoComplete="off"
                     spellCheck={false}
@@ -185,7 +188,7 @@ export function NavSearchView({
                             : "bg-muted text-muted-foreground hover:bg-accent hover:text-foreground"
                     )}
                 >
-                    Search
+                    {t("searchAction")}
                     <ArrowRight className="size-3" />
                 </button>
             </div>
@@ -230,7 +233,7 @@ export function NavSearchView({
                             )}
                             {productSuggestions.length > 0 && (
                                 <div>
-                                    <SectionLabel label="Products" />
+                                    <SectionLabel label={t("products")} />
                                     {productSuggestions.map((s, i) => (
                                         <SuggestionRow
                                             key={s.id}
@@ -262,7 +265,7 @@ export function NavSearchView({
                         <>
                             {hasAnySuggestions && <div className="mx-3 my-1 border-t border-border/40" />}
                             <div className="p-2">
-                                <SectionLabel label="Recent searches" />
+                                <SectionLabel label={t("recentSearches")} />
                                 {recentSearches.map((term) => (
                                     <div
                                         key={term}

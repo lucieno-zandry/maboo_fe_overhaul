@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Slider } from "../ui/slider";
 import { getCurrencySymbol } from "~/lib/format-money";
 import { FilterSection } from "./filter-section";
+import { useTranslation } from "react-i18next";
 
 export interface FilterSidebarViewProps {
     filters: SearchFilters;
@@ -37,17 +38,26 @@ export function FilterSidebarView({
     onReset,
     currencySymbol,
 }: FilterSidebarViewProps) {
+    const { t } = useTranslation("search_results");
     const priceValues = [
         filters.min_price ?? priceRangeMeta?.min ?? 0,
         filters.max_price ?? priceRangeMeta?.max ?? 1000,
     ];
+
+    // Build translated sort options
+    const sortOptionLabels: Record<string, string> = {
+        "Newest first": t("newestFirst"),
+        "Oldest first": t("oldestFirst"),
+        "Name A → Z": t("nameAZ"),
+        "Name Z → A": t("nameZA"),
+    };
 
     return (
         <aside className="flex h-full flex-col bg-card border-r border-border/60">
             <div className="flex items-center justify-between border-b border-border/60 px-5 py-4">
                 <div className="flex items-center gap-2">
                     <SlidersHorizontal className="size-4 text-primary" />
-                    <span className="font-semibold text-foreground">Filters</span>
+                    <span className="font-semibold text-foreground">{t("filters")}</span>
                     {activeFiltersCount > 0 && (
                         <Badge variant="default" className="h-5 rounded-full px-1.5 text-[10px]">
                             {activeFiltersCount}
@@ -62,7 +72,7 @@ export function FilterSidebarView({
                         onClick={onReset}
                     >
                         <RotateCcw className="size-3" />
-                        Reset
+                        {t("reset")}
                     </Button>
                 )}
             </div>
@@ -70,7 +80,7 @@ export function FilterSidebarView({
             <ScrollArea className="flex-1 px-5">
                 <div className="divide-y divide-border/40 py-2">
 
-                    <FilterSection title="Sort by">
+                    <FilterSection title={t("sortBy")}>
                         <Select
                             value={String(filters.sortIndex)}
                             onValueChange={(v) => onFilterChange("sortIndex", Number(v))}
@@ -81,14 +91,14 @@ export function FilterSidebarView({
                             <SelectContent>
                                 {sortOptions.map((opt, i) => (
                                     <SelectItem key={i} value={String(i)}>
-                                        {opt.label}
+                                        {sortOptionLabels[opt.label] || opt.label}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
                     </FilterSection>
 
-                    <FilterSection title="Category">
+                    <FilterSection title={t("category")}>
                         {categoriesLoading ? (
                             <div className="space-y-2">
                                 {[1, 2, 3].map((i) => (
@@ -106,7 +116,7 @@ export function FilterSidebarView({
                                             : "text-muted-foreground hover:bg-accent hover:text-foreground"
                                     )}
                                 >
-                                    All categories
+                                    {t("allCategories")}
                                     {filters.category_id === undefined && (
                                         <span className="size-1.5 rounded-full bg-primary-foreground" />
                                     )}
@@ -132,7 +142,7 @@ export function FilterSidebarView({
                         )}
                     </FilterSection>
 
-                    <FilterSection title="Price range">
+                    <FilterSection title={t("priceRange")}>
                         {priceRangeLoading ? (
                             <div className="h-10 animate-pulse rounded-md bg-muted" />
                         ) : priceRangeMeta ? (
@@ -152,7 +162,7 @@ export function FilterSidebarView({
                                     <div className="flex h-9 items-center rounded-md border border-input bg-background px-3 text-sm">
                                         {currencySymbol}{priceValues[0]}
                                     </div>
-                                    <span className="text-xs text-muted-foreground">to</span>
+                                    <span className="text-xs text-muted-foreground">{t("to")}</span>
                                     <div className="flex h-9 items-center rounded-md border border-input bg-background px-3 text-sm">
                                         {currencySymbol}{priceValues[1]}
                                     </div>
@@ -160,7 +170,7 @@ export function FilterSidebarView({
                             </div>
                         ) : (
                             <p className="text-xs text-muted-foreground">
-                                Price range not available
+                                {t("priceRangeNotAvailable")}
                             </p>
                         )}
                     </FilterSection>

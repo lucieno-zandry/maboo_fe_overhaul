@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { LayoutGrid, List, SlidersHorizontal } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { cn } from "~/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export interface TopBarViewProps {
     viewMode: ViewMode;
@@ -17,6 +18,8 @@ export function TopBarView({
     onViewModeChange,
     onOpenFilters,
 }: TopBarViewProps) {
+    const { t } = useTranslation("search_results");
+
     return (
         <div className="flex items-center justify-between gap-3">
             {/* Mobile filter toggle */}
@@ -27,7 +30,7 @@ export function TopBarView({
                 onClick={onOpenFilters}
             >
                 <SlidersHorizontal className="size-4" />
-                Filters
+                {t("filters")}
                 {activeFiltersCount > 0 && (
                     <Badge
                         variant="default"
@@ -47,7 +50,7 @@ export function TopBarView({
                             ? "bg-background text-foreground shadow-sm"
                             : "text-muted-foreground hover:text-foreground"
                     )}
-                    title="Grid view"
+                    title={t("gridView")}
                 >
                     <LayoutGrid className="size-3.5" />
                 </button>
@@ -59,7 +62,7 @@ export function TopBarView({
                             ? "bg-background text-foreground shadow-sm"
                             : "text-muted-foreground hover:text-foreground"
                     )}
-                    title="List view"
+                    title={t("listView")}
                 >
                     <List className="size-3.5" />
                 </button>
